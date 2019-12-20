@@ -1,4 +1,12 @@
 # Keras-DIOU-YOLOv3
+<p align="center">
+    <img width="100%" src="https://github.com/miemie2013/Keras-DIOU-YOLOv3/blob/master/weixin/diou.png" style="max-width:100%;">
+    </a>
+</p>
+<p align="center">
+    <img width="100%" src="https://github.com/miemie2013/Keras-DIOU-YOLOv3/blob/master/weixin/duibi.png" style="max-width:100%;">
+    </a>
+</p>
 ## 概述
 Keras上700行代码复现YOLOv3！使用DIOU loss。支持将模型导出为pytorch模型！
 请查看
@@ -104,7 +112,7 @@ yolov3的initial_filters默认是32，你调小initial_filters会使得模型变
 ## 后话
 扫一扫关注我们的公众号：
 <p align="center">
-    <img width="100%" src="https://github.com/miemie2013/Keras-DIOU-YOLOv3/blob/master/weixin/qrcode_for_gh_989f6358f007_258.jpg" style="max-width:100%;">
+    <img width="20%" src="https://github.com/miemie2013/Keras-DIOU-YOLOv3/blob/master/weixin/qrcode_for_gh_989f6358f007_258.jpg" style="max-width:20%;">
     </a>
 </p>
 或者直接搜索公众号：猿生物语
