@@ -68,7 +68,6 @@ xxxiou/      里面有giou、diou、ciou的代码，将train.py中bbox_ciou(boxe
 train_path = 'annotation/coco2017_train.txt'
 val_path = 'annotation/coco2017_val.txt'
 classes_path = 'data/coco_classes.txt'
-
 ```
 
 注解文件的格式如下：
