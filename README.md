@@ -2,16 +2,20 @@
 ## 概述
 Keras上700行代码复现YOLOv3！使用DIOU loss。支持将模型导出为pytorch模型！
 请查看
-[- **`diou_loss的论文`**](https://arxiv.org/pdf/1911.08287.pdf)
+[ **`diou_loss的论文`**](https://arxiv.org/pdf/1911.08287.pdf)
+
 参考了3个仓库：
+
 https://github.com/YunYang1994/tensorflow-yolov3
+
 https://github.com/xiaochus/YOLOv3
+
 https://github.com/qqwweee/keras-yolo3
+
 这个仓库有很大一部分照搬了YunYang1994的代码（label的填写以及损失函数部分），这里致敬大佬！
 后处理部分参考了xiaochus的代码。
 keras复杂损失层参考了qqwweee的代码。
 导出为pytorch模型、实现diou+ciou、以及其它一些部分为自己原创。
-
 YunYang1994的仓库训练出的模型很优秀，为了达到同等优秀的效果，所以损失函数部分照搬了大佬仓库里的代码，但是有点不同的地方是将giou_loss改成了ciou_loss。根据我自己的训练结果，
 发现使用同等超参数的条件下，使用ciou_loss训练比使用giou_loss训练能达到更高mAP。
 
@@ -20,11 +24,17 @@ YunYang1994的仓库训练出的模型很优秀，为了达到同等优秀的效
 两个在coco上的预训练模型（yolo_bgr_mAP_46.h5和yolo_bgr_mAP_47.pt），一个为keras版，一个为pytorch版本。在release处下载。
 
 coco2017数据集下载：
+
 http://images.cocodataset.org/zips/train2017.zip 
+
 http://images.cocodataset.org/annotations/annotations_trainval2017.zip
+
 http://images.cocodataset.org/zips/val2017.zip 
+
 http://images.cocodataset.org/annotations/stuff_annotations_trainval2017.zip
+
 http://images.cocodataset.org/zips/test2017.zip 
+
 http://images.cocodataset.org/annotations/image_info_test2017.zip
 
 
@@ -99,6 +109,7 @@ yolov3的initial_filters默认是32，你调小initial_filters会使得模型变
     </a>
 </p>
 或者直接搜索公众号：猿生物语
+
 不定时推送一些技术文章哦！
 
 
