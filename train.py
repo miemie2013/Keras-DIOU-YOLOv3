@@ -243,6 +243,27 @@ def image_preporcess(image, target_size, gt_boxes=None):
         gt_boxes[:, [1, 3]] = gt_boxes[:, [1, 3]] * scale + dh
         return pimage, gt_boxes
 
+def random_fill(image, bboxes):
+
+    if random.random() < 0.5:
+        h, w, _ = image.shape
+        # 水平方向填充黑边，以训练小目标检测
+        if random.random() < 0.5:
+            dx = random.randint(int(0.5*w), int(1.5*w))
+            black_1 = np.zeros((h, dx, 3), dtype='uint8')
+            black_2 = np.zeros((h, dx, 3), dtype='uint8')
+            image = np.concatenate([black_1, image, black_2], axis=1)
+            bboxes[:, [0, 2]] += dx
+        # 垂直方向填充黑边，以训练小目标检测
+        else:
+            dy = random.randint(int(0.5*h), int(1.5*h))
+            black_1 = np.zeros((dy, w, 3), dtype='uint8')
+            black_2 = np.zeros((dy, w, 3), dtype='uint8')
+            image = np.concatenate([black_1, image, black_2], axis=0)
+            bboxes[:, [1, 3]] += dy
+
+    return image, bboxes
+
 def random_horizontal_flip(image, bboxes):
 
     if random.random() < 0.5:
@@ -314,6 +335,7 @@ def parse_annotation(annotation, train_input_size, annotation_type):
         bboxes = np.array([list(map(lambda x: int(float(x)), box.split(','))) for box in line[1:]])
 
     if annotation_type == 'train':
+        image, bboxes = random_fill(np.copy(image), np.copy(bboxes))
         image, bboxes = random_horizontal_flip(np.copy(image), np.copy(bboxes))
         image, bboxes = random_crop(np.copy(image), np.copy(bboxes))
         image, bboxes = random_translate(np.copy(image), np.copy(bboxes))
