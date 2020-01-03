@@ -116,6 +116,9 @@ yolov3的initial_filters默认是32，你调小initial_filters会使得模型变
 运行demo_kr.py或者是demo_pt.py。
 
 ## 后话
+cv算法交流q群：645796480
+但是关于仓库的疑问尽量在Issues上提，避免重复解答。
+
 扫一扫关注我们的公众号：
 <p align="center">
     <img width="20%" src="https://github.com/miemie2013/Keras-DIOU-YOLOv3/blob/master/weixin/qrcode_for_gh_989f6358f007_258.jpg" style="max-width:20%;">
