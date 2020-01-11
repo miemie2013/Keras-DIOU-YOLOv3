@@ -9,10 +9,10 @@
 #
 #================================================================
 import keras
-from train import decode, loss_layer, bbox_iou, focal
+from train import decode, loss_layer
 
 
-model = keras.models.load_model('ep000020-loss24.876-val_loss51.209.h5', custom_objects={'decode': decode, 'loss_layer': loss_layer, 'bbox_iou': bbox_iou, 'focal': focal, '<lambda>': keras.losses.mean_squared_error, })
+model = keras.models.load_model('ep000020-loss24.876-val_loss51.209.h5', custom_objects={'decode': decode, 'loss_layer': loss_layer, '<lambda>': keras.losses.mean_squared_error, })
 
 # 训练好的模型 传入模型的图片是 bgr格式
 # 传入模型的图片是否转换为rgb？本地评估的话选择False

@@ -5,6 +5,7 @@
 import torch
 import numpy as np
 
+# 这个损失函数写得不好，仅留作纪念用
 class YoloLoss(torch.nn.Module):
     def __init__(self):
         super(YoloLoss, self).__init__()
