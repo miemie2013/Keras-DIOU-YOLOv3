@@ -193,7 +193,7 @@ def decode(conv_output, anchors, stride, num_class):
     pred_prob = tf.sigmoid(conv_raw_prob)
     return tf.concat([pred_xywh, pred_conf, pred_prob], axis=-1)
 
-def yolo_loss(args, num_classes, iou_loss_thresh, anchors):
+def yolo_loss(args, num_classes, iou_loss_thresh, anchors, alpha_1, alpha_2, alpha_3):
     conv_lbbox = args[0]   # (?, ?, ?, 3*(num_classes+5))
     conv_mbbox = args[1]   # (?, ?, ?, 3*(num_classes+5))
     conv_sbbox = args[2]   # (?, ?, ?, 3*(num_classes+5))
@@ -206,9 +206,9 @@ def yolo_loss(args, num_classes, iou_loss_thresh, anchors):
     pred_sbbox = decode(conv_sbbox, anchors[0], 8, num_classes)
     pred_mbbox = decode(conv_mbbox, anchors[1], 16, num_classes)
     pred_lbbox = decode(conv_lbbox, anchors[2], 32, num_classes)
-    loss_sbbox = loss_layer(conv_sbbox, pred_sbbox, label_sbbox, true_sbboxes, 8, num_classes, iou_loss_thresh, alpha=0.5)
-    loss_mbbox = loss_layer(conv_mbbox, pred_mbbox, label_mbbox, true_mbboxes, 16, num_classes, iou_loss_thresh, alpha=0.5)
-    loss_lbbox = loss_layer(conv_lbbox, pred_lbbox, label_lbbox, true_lbboxes, 32, num_classes, iou_loss_thresh, alpha=0.5)
+    loss_sbbox = loss_layer(conv_sbbox, pred_sbbox, label_sbbox, true_sbboxes, 8, num_classes, iou_loss_thresh, alpha=alpha_1)
+    loss_mbbox = loss_layer(conv_mbbox, pred_mbbox, label_mbbox, true_mbboxes, 16, num_classes, iou_loss_thresh, alpha=alpha_2)
+    loss_lbbox = loss_layer(conv_lbbox, pred_lbbox, label_lbbox, true_lbboxes, 32, num_classes, iou_loss_thresh, alpha=alpha_3)
     return loss_sbbox + loss_mbbox + loss_lbbox
 
 def get_classes(classes_path):
@@ -504,6 +504,13 @@ if __name__ == '__main__':
     max_bbox_per_scale = 150
     iou_loss_thresh = 0.5
 
+    # 经过试验发现alpha取>0.5的值时mAP会提高，但误判（False Predictions）会增加；alpha取<0.5的值时mAP会降低，误判会降低。
+    # 试验时alpha_1取0.95，alpha_2取0.85，alpha_3取0.75
+    # 小感受野输出层输出的格子最多，预测框最多，正样本很有可能占比是最少的，所以试验时alpha_1 > alpha_2 > alpha_3
+    alpha_1 = 0.5    # 小感受野输出层的focal_loss的alpha
+    alpha_2 = 0.5    # 中感受野输出层的focal_loss的alpha
+    alpha_3 = 0.5    # 大感受野输出层的focal_loss的alpha
+
     if pattern == 2:
         lr = 0.0001
         batch_size = 8
@@ -544,7 +551,8 @@ if __name__ == '__main__':
             layers.Input(name='input_7', shape=(max_bbox_per_scale, 4))              # true_lbboxes
         ]
         model_loss = layers.Lambda(yolo_loss, output_shape=(1,), name='yolo_loss',
-                               arguments={'num_classes': num_classes, 'iou_loss_thresh': iou_loss_thresh, 'anchors': anchors})([*model_body.output, *y_true])
+                               arguments={'num_classes': num_classes, 'iou_loss_thresh': iou_loss_thresh,
+                                          'anchors': anchors, 'alpha_1': alpha_1, 'alpha_2': alpha_2, 'alpha_3': alpha_3})([*model_body.output, *y_true])
         model = keras.models.Model([model_body.input, *y_true], model_loss)
     elif pattern == 1:
         lr = 0.0001
@@ -565,7 +573,8 @@ if __name__ == '__main__':
             layers.Input(name='input_7', shape=(max_bbox_per_scale, 4))              # true_lbboxes
         ]
         model_loss = layers.Lambda(yolo_loss, output_shape=(1,), name='yolo_loss',
-                               arguments={'num_classes': num_classes, 'iou_loss_thresh': iou_loss_thresh, 'anchors': anchors})([*model_body.output, *y_true])
+                               arguments={'num_classes': num_classes, 'iou_loss_thresh': iou_loss_thresh,
+                                          'anchors': anchors, 'alpha_1': alpha_1, 'alpha_2': alpha_2, 'alpha_3': alpha_3})([*model_body.output, *y_true])
         model = keras.models.Model([model_body.input, *y_true], model_loss)
     elif pattern == 0:
         lr = 0.0001
@@ -659,7 +668,8 @@ if __name__ == '__main__':
             layers.Input(name='input_7', shape=(max_bbox_per_scale, 4))              # true_lbboxes
         ]
         model_loss = layers.Lambda(yolo_loss, output_shape=(1,), name='yolo_loss',
-                               arguments={'num_classes': num_classes, 'iou_loss_thresh': iou_loss_thresh, 'anchors': anchors})([*model_body.output, *y_true])
+                               arguments={'num_classes': num_classes, 'iou_loss_thresh': iou_loss_thresh,
+                                          'anchors': anchors, 'alpha_1': alpha_1, 'alpha_2': alpha_2, 'alpha_3': alpha_3})([*model_body.output, *y_true])
         model = keras.models.Model([model_body.input, *y_true], model_loss)
     model.summary()
     # keras.utils.vis_utils.plot_model(model, to_file='darknet.png', show_shapes=True)

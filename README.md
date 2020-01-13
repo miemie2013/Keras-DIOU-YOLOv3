@@ -8,11 +8,22 @@
     </a>
 </p>
 
+## 传送门
+3款yolov3，总有一款适合你。paddlepaddle算力白嫖版，可以白嫖百度Tesla V100的算力。Pytorch，学术方面最火的深度学习框架，动态图，不必开sess，调试最方便。Keras，对新手最友好的深度学习框架，也是咩酱的初恋。
+
+Pytorch兄弟版：https://github.com/miemie2013/Pytorch-DIOU-YOLOv3
+
+PaddlePaddle姐妹版：制作中
+
 ## 更新日记
 
 2020/01/11:增加注释，补充focal_loss。
 
 2019/12/31:增加填充黑边数据增强，以加强训练小目标检测。不久的将来可能会加入BiFPN、ASFF等（有空就加入）。祝大家新年快乐！
+
+## 需要补充
+
+BiFPN、ASFF、DCN
 
 ## 概述
 
