@@ -14,7 +14,7 @@ if __name__ == '__main__':
     input_shape = (416, 416)
     # input_shape = (608, 608)
 
-    _decode = Decode(0.6, 0.5, input_shape, model_path, file)
+    _decode = Decode(0.3, 0.45, input_shape, model_path, file)
 
     # detect images in test floder.
     for (root, dirs, files) in os.walk('images/test'):
