@@ -463,13 +463,13 @@ def stack_residual_block(inputs, filters, n):
     return x
 
 if __name__ == '__main__':
-    train_path = 'annotation/coco2017_train.txt'
-    val_path = 'annotation/coco2017_val.txt'
-    classes_path = 'data/coco_classes.txt'
+    train_path = 'annotation/voc2012_train.txt'
+    val_path = 'annotation/voc2012_val.txt'
+    classes_path = 'data/voc_classes.txt'
 
-    # train_path = 'annotation/voc2007_train.txt'
-    # val_path = 'annotation/voc2007_val.txt'
-    # classes_path = 'data/voc_classes.txt'
+    # train_path = 'annotation/coco2017_train.txt'
+    # val_path = 'annotation/coco2017_val.txt'
+    # classes_path = 'data/coco_classes.txt'
 
     class_names = get_classes(classes_path)
     num_classes = len(class_names)
