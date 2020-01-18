@@ -69,6 +69,7 @@ class Decode(object):
         return class_names
 
     def draw(self, image, boxes, scores, classes):
+        image_h, image_w, _ = image.shape
         # 定义颜色
         hsv_tuples = [(1.0 * x / self.num_classes, 1., 1.) for x in range(self.num_classes)]
         colors = list(map(lambda x: colorsys.hsv_to_rgb(*x), hsv_tuples))
@@ -85,7 +86,8 @@ class Decode(object):
             right = min(image.shape[1], np.floor(x1 + 0.5).astype(int))
             bottom = min(image.shape[0], np.floor(y1 + 0.5).astype(int))
             bbox_color = colors[cl]
-            cv2.rectangle(image, (left, top), (right, bottom), bbox_color, 1)
+            bbox_thick = 1 if min(image_h, image_w) < 400 else 2
+            cv2.rectangle(image, (left, top), (right, bottom), bbox_color, bbox_thick)
             bbox_mess = '%s: %.2f' % (self.all_classes[cl], score)
             t_size = cv2.getTextSize(bbox_mess, 0, 0.5, thickness=1)[0]
             cv2.rectangle(image, (left, top), (left + t_size[0], top - t_size[1] - 3), bbox_color, -1)
