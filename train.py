@@ -59,7 +59,7 @@ def bbox_ciou(boxes1, boxes2):
     inter_section = tf.maximum(right_down - left_up, 0.0)
     inter_area = inter_section[..., 0] * inter_section[..., 1]
     union_area = boxes1_area + boxes2_area - inter_area
-    iou = inter_area / union_area
+    iou = inter_area / (union_area + 1e-9)
 
     # 包围矩形的左上角坐标、右下角坐标，shape 都是 (8, 13, 13, 3, 2)
     enclose_left_up = tf.minimum(boxes1_x0y0x1y1[..., :2], boxes2_x0y0x1y1[..., :2])
@@ -72,10 +72,9 @@ def bbox_ciou(boxes1, boxes2):
     # 两矩形中心点距离的平方
     p2 = K.pow(boxes1[..., 0] - boxes2[..., 0], 2) + K.pow(boxes1[..., 1] - boxes2[..., 1], 2)
 
-    # 增加av。分母boxes2[..., 3]可能为0，所以加上除0保护防止nan。
-    atan1 = tf.atan(boxes1[..., 2] / boxes1[..., 3])
-    temp_a = K.switch(boxes2[..., 3] > 0.0, boxes2[..., 3], boxes2[..., 3] + 1.0)
-    atan2 = tf.atan(boxes2[..., 2] / temp_a)
+    # 增加av。所以加上除0保护防止nan。
+    atan1 = tf.atan(boxes1[..., 2] / (boxes1[..., 3] + 1e-9))
+    atan2 = tf.atan(boxes2[..., 2] / (boxes2[..., 3] + 1e-9))
     v = 4.0 * K.pow(atan1 - atan2, 2) / (math.pi ** 2)
     a = v / (1 - iou + v)
 
