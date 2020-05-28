@@ -72,7 +72,7 @@ def bbox_ciou(boxes1, boxes2):
     # 两矩形中心点距离的平方
     p2 = K.pow(boxes1[..., 0] - boxes2[..., 0], 2) + K.pow(boxes1[..., 1] - boxes2[..., 1], 2)
 
-    # 增加av。所以加上除0保护防止nan。
+    # 增加av。加上除0保护防止nan。
     atan1 = tf.atan(boxes1[..., 2] / (boxes1[..., 3] + 1e-9))
     atan2 = tf.atan(boxes2[..., 2] / (boxes2[..., 3] + 1e-9))
     v = 4.0 * K.pow(atan1 - atan2, 2) / (math.pi ** 2)
